@@ -38,6 +38,7 @@ for imagePath in paths.list_images(args["images"]):
     blur = cv2.GaussianBlur(image, (5, 5), 0)
 
     fmOriginal = variance_of_laplacian(gray)
+    print fmOriginal
     fmBlur = variance_of_laplacian(blur)
     
     text = "Img"
