@@ -10,30 +10,27 @@ import cv2
 def variance_of_laplacian(image):
     return cv2.Laplacian(image, cv2.CV_64F).var()
     
+def blurring(sizeOfKernel, howManyTimes, inputImg, sigMax):
+    for x in range(howManyTimes):
+        inputImg = cv2.GaussianBlur(inputImg, sizeOfKernel, sigMax)
+    return inputImg
 
-
-image = cv2.imread("img1.jpg")
+image = cv2.imread("img5.jpeg")
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 
+for x in range(1, 19, 2):
+    blur = blurring((x, x), 1, gray, 0)
 
-blur = cv2.GaussianBlur(image, (5, 5), 0)
+    name = "img1Blurred" + str(x) + ".jpg"
+    print name
+    
+    cv2.imwrite(name, blur)
+                
+    cv2.imshow('Blurred', blur)
+    cv2.imshow('Original', image)
+    
+    cv2.waitKey(0)
+    
 
-
-fmOriginal = variance_of_laplacian(gray)
-fmBlur = variance_of_laplacian(blur)
-
-text = "Img"
-
-cv2.putText(image, "{}: {:.2f}".format(text, fmOriginal), (10, 30),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 3)
-            
-cv2.putText(blur, "{}: {:.2f}".format(text, fmBlur), (10, 30),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 3)            
-#cv2.imwrite('img1Blur5_5_1.jpg', blur)
-            
-cv2.imshow('Blurred', blur)
-cv2.imshow('Original', image)
-
-cv2.waitKey(0)
