@@ -18,19 +18,48 @@ def wavelet(img, mode = 'haar', level = 1):
     
     imArray = cv2.cvtColor(imArray, cv2.COLOR_RGB2GRAY)
     
-    cv2.imshow("Test", imArray)
+    #cv2.imshow("Test", imArray)
     
     imArray = np.float32(imArray)
     imArray /= 255;
     
     coeffs = pywt.wavedec2(imArray, mode, level = level)
     
-    coeffs_H = list(coeffs)
-    coeffs_H[0] *= 0;
+    arr, coeff_slices = pywt.coeffs_to_array(coeffs)
+    print arr
+    print coeff_slices
     
+    print "Vertical " + str(coeff_slices[1]['da'])
+    print "Diagonal " + str(coeff_slices[1]['dd'])
+    print "Horizontal " + str(coeff_slices[1]['ad'])  
+    
+    diagonal = arr[194:388, 286:572]
+    horizontal = arr[194:388, 0:286]
+    vertical = arr[0:194, 286: 572]
+    print vertical
+    
+    #plt.figure()
+    #plt.imshow(diagonal, interpolation='nearest', cmap=plt.cm.gray)
+    #plt.show()
+    
+    print diagonal.shape
+    
+    #plt.figure();
+    #plt.imshow(arr, interpolation='nearest', cmap=plt.cm.gray)
+    #plt.show()
+    
+    
+    #print coeffs
+    coeffs_H = list(coeffs)
+    #print coeffs_H
+    coeffs_H[0] *= 0;
+
     imArray_H = pywt.waverec2(coeffs_H, mode);
     imArray_H *= 255;
+    print imArray_H
     imArray_H = np.uint8(imArray_H)
+    
+    #cv2.imshow("Decomposition", imArray_H)
 
     x,y = imArray_H.shape
     
@@ -89,9 +118,9 @@ def wavelet(img, mode = 'haar', level = 1):
     
     #print "Total ", sumLower + sumMiddle + sumUpper
     sumTotalString = "Total = " + str(sumTotal)
-    
+    """
     plt.bar(range(len(suma)), suma, 1)   
-    plt.xlabel("Frequency")
+    plt.ylabel("Frequency")
     
     plt.text(40, 4, sumLowerString, fontsize = 15)
     plt.text(40, 3.8, sumMiddleString, fontsize = 15)
@@ -99,9 +128,9 @@ def wavelet(img, mode = 'haar', level = 1):
     plt.text(40, 3.4, sumTotalString, fontsize = 15)
 
     plt.xlim(-50, 300)
-    plt.savefig(img)
+    #plt.savefig(img)
     plt.show()
-    
+    """
     #print range(x)
     """
     dataZ = np.zeros(imArray_H.shape)  
@@ -126,4 +155,4 @@ def wavelet(img, mode = 'haar', level = 1):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     
-wavelet("img1Blurred17.jpg", 'db1', 2)
+wavelet("img1Blurred1.jpg", 'db1', 1)
